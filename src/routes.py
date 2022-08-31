@@ -3,8 +3,12 @@ from src.models.Genre import Genre
 from src.models.Artist import Artist,artist_genre
 from src.models.Venue import Venue, venue_genre
 from src.models.Show import Show
+from typing import Optional
+
+
 
 from src import app,db
+
 
 
 @app.route('/')
@@ -83,3 +87,45 @@ def create_show():
     db.session.commit()
     print(Show.query.first().start_time)
     return jsonify({"response":"Show has been created!"})
+
+
+def to_dict(table,data,joined=None):
+    table_cols = []
+    table_cols += [column.key for column in table.__table__.columns]
+    print(table_cols)
+    all_data_json = {table.__table__.name : []}
+    for element in data:
+        data_json = {}
+        for col in table_cols:
+            data_json[col]=  getattr(element,col) 
+        if(joined):
+            print(getattr(element,joined.__table__.name))
+            data_json[joined.__table__.name] = to_dict(joined,getattr(element,joined.__table__.name))
+        all_data_json[table.__table__.name].append(data_json)
+    return all_data_json[table.__table__.name]
+
+
+@app.route('/artists')
+def get_artists():
+    artists = Artist.query.all()
+    artists_json = to_dict(Artist,artists,Genre)
+    return jsonify({"artists":artists_json})
+
+@app.route('/genres')
+def get_genres():
+    genres = Genre.query.all()
+    genres_json = to_dict(Genre,genres)   
+    return jsonify({"genres":genres_json})
+
+@app.route('/venues')
+def get_venues():
+    venues = Venue.query.all()
+    venues_json = to_dict(Venue,venues,Genre)   
+    return jsonify({"venues":venues_json})
+
+@app.route('/shows')
+def get_shows():
+    shows = Show.query.all()
+    shows_json = to_dict(Show,shows)   
+    return jsonify({"shows":shows_json})
+
