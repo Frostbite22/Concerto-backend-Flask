@@ -92,7 +92,6 @@ def create_show():
 def to_dict(table,data,joined=None):
     table_cols = []
     table_cols += [column.key for column in table.__table__.columns]
-    print(table_cols)
     all_data_json = {table.__table__.name : []}
     for element in data:
         data_json = {}
@@ -102,6 +101,7 @@ def to_dict(table,data,joined=None):
             print(getattr(element,joined.__table__.name))
             data_json[joined.__table__.name] = to_dict(joined,getattr(element,joined.__table__.name))
         all_data_json[table.__table__.name].append(data_json)
+    print(all_data_json)
     return all_data_json[table.__table__.name]
 
 
