@@ -58,13 +58,16 @@ def create_venue():
 @app.route('/create/show',methods=['GET', 'POST'])
 def create_show():
     json_object = request.json
-    artist_name= json_object['artist_name']
-    venue_name = json_object['venue_name']
+    # artist_name= json_object['artist_name']
+    # venue_name = json_object['venue_name']
+    # start_time = json_object['start_time']
+    # artist = Artist.query.filter_by(name=artist_name).first()
+    # venue = Venue.query.filter_by(name=venue_name).first()
+    artist_id = json_object['id_artist']
+    id_venue = json_object['id_venue']
     start_time = json_object['start_time']
-    artist = Artist.query.filter_by(name=artist_name).first()
-    venue = Venue.query.filter_by(name=venue_name).first()
 
-    show = Show(id_artist=artist.id,id_venue=venue.id,start_time=start_time)
+    show = Show(id_artist=artist_id,id_venue=id_venue,start_time=start_time)
     db.session.add(show)
     db.session.commit()
     print(Show.query.first().start_time)
