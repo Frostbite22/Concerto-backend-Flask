@@ -89,6 +89,22 @@ def to_dict(table,data,joined=None):
     print(all_data_json)
     return all_data_json[table.__table__.name]
 
+def to_dict_single(table,data,joined=None):
+    table_cols = []
+    table_cols += [column.key for column in table.__table__.columns]
+    all_data_json = {table.__table__.name : []}
+    data_json = {}
+    for col in table_cols:
+        data_json[col]=  getattr(data,col) 
+    if(joined):
+        print(getattr(element,joined.__table__.name))
+        data_json[joined.__table__.name] = to_dict(joined,getattr(element,joined.__table__.name))
+    all_data_json[table.__table__.name].append(data_json)
+    print(all_data_json)
+    return all_data_json[table.__table__.name]
+
+
+
 
 @app.route('/artists')
 def get_artists():
@@ -114,3 +130,10 @@ def get_shows():
     shows_json = to_dict(Show,shows)   
     return jsonify({"shows":shows_json})
 
+
+@app.route("/genre/<int:genre_id>")
+def get_genre(genre_id):
+    genre = Genre.query.get_or_404(genre_id)
+    print(genre)
+    genre_json = to_dict_single(Genre,genre)  
+    return jsonify({"genre":genre_json})
