@@ -86,7 +86,6 @@ def to_dict(table,data,joined=None):
             print(getattr(element,joined.__table__.name))
             data_json[joined.__table__.name] = to_dict(joined,getattr(element,joined.__table__.name))
         all_data_json[table.__table__.name].append(data_json)
-    print(all_data_json)
     return all_data_json[table.__table__.name]
 
 def to_dict_single(table,data,joined=None):
@@ -97,10 +96,9 @@ def to_dict_single(table,data,joined=None):
     for col in table_cols:
         data_json[col]=  getattr(data,col) 
     if(joined):
-        print(getattr(element,joined.__table__.name))
-        data_json[joined.__table__.name] = to_dict(joined,getattr(element,joined.__table__.name))
+        print(getattr(data,joined.__table__.name))
+        data_json[joined.__table__.name] = to_dict(joined,getattr(data,joined.__table__.name))
     all_data_json[table.__table__.name].append(data_json)
-    print(all_data_json)
     return all_data_json[table.__table__.name]
 
 
@@ -134,6 +132,26 @@ def get_shows():
 @app.route("/genre/<int:genre_id>")
 def get_genre(genre_id):
     genre = Genre.query.get_or_404(genre_id)
-    print(genre)
     genre_json = to_dict_single(Genre,genre)  
     return jsonify({"genre":genre_json})
+
+
+@app.route("/show/<int:show_id>")
+def get_show(show_id):
+    show = Show.query.get_or_404(show_id)
+    show_json = to_dict_single(Show,show)  
+    return jsonify({"show":show_json})
+
+
+@app.route("/venue/<int:venue_id>")
+def get_venue(venue_id):
+    venue = Venue.query.get_or_404(venue_id)
+    venue_json = to_dict_single(Venue,venue,Genre)  
+    return jsonify({"venue":venue_json})
+
+
+@app.route("/artist/<int:artist_id>")
+def get_artist(artist_id):
+    artist = Artist.query.get_or_404(artist_id)
+    artist_json = to_dict_single(Artist,artist,Genre)  
+    return jsonify({"artist":artist_json})
