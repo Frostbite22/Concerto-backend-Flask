@@ -176,8 +176,8 @@ def delete_venue(genre_id):
         pass
     return jsonify({"venue":f"venue with id {venue_id} deleted"})
 
-@app.route("/venue/<int:artist_id>/delete",methods=['POST','GET'])
-def delete_venue(artist_id):
+@app.route("/artist/<int:artist_id>/delete",methods=['POST','GET'])
+def delete_artist(artist_id):
     artist = Artist.query.get_or_404(venue_id)
     try :
         db.session.delete(artist)
@@ -185,6 +185,17 @@ def delete_venue(artist_id):
     except:
         pass
     return jsonify({"artist":f"artist with id {artist_id} deleted"})
+
+@app.route("/show/<int:show_id>/delete",methods=['POST','GET'])
+def delete_show(show_id):
+    artist = Artist.query.get_or_404(show_id)
+    try :
+        db.session.delete(show)
+        db.session.commit()
+    except:
+        pass
+    return jsonify({"show":f"show with id {show_id} deleted"})
+
 
 
 
