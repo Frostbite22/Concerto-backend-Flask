@@ -173,7 +173,8 @@ def delete_venue(venue_id):
         db.session.delete(venue)
         db.session.commit()
     except:
-        pass
+        print("cant")
+        return jsonify({"venue":f"cant :venue with id {venue_id} already have a show"})
     return jsonify({"venue":f"venue with id {venue_id} deleted"})
 
 @app.route("/artist/<int:artist_id>/delete",methods=['POST','GET'])
@@ -183,12 +184,12 @@ def delete_artist(artist_id):
         db.session.delete(artist)
         db.session.commit()
     except:
-        pass
+        return jsonify({"artist":f"cant :artist with id {artist_id} already have a show"})
     return jsonify({"artist":f"artist with id {artist_id} deleted"})
 
 @app.route("/show/<int:show_id>/delete",methods=['POST','GET'])
 def delete_show(show_id):
-    artist = Artist.query.get_or_404(show_id)
+    show = Show.query.get_or_404(show_id)
     try :
         db.session.delete(show)
         db.session.commit()
