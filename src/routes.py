@@ -197,6 +197,54 @@ def delete_show(show_id):
         pass
     return jsonify({"show":f"show with id {show_id} deleted"})
 
+@app.route("/genre/<int:genre_id>/update",methods=['POST','GET'])
+def update_genre(genre_id):
+    json_object = request.json 
+    genre = Genre.query.get_or_404(genre_id)
+    genre.name = json_object['name']
+    db.session.commit()
+    return jsonify({"response":"Genre has been updated!"})
+
+@app.route("/venue/<int:venue_id>/update",methods=['POST','GET'])
+def update_venue(venue_id):
+    json_object = request.json 
+    venue = Venue.query.get_or_404(venue_id)
+    venue.name = json_object['name']
+    venue.city = json_object['city']
+    venue.phone = json_object['phone']
+    venue.fb_link = json_object['fb_link']
+    genre = Genre.query.filter_by(name=json_object['genres']).first()
+    venue.genres = genre
+    db.session.commit()
+    return jsonify({"response":"Venue has been updated!"})
+
+@app.route("/artist/<int:artist_id>/update",methods=['POST','GET'])
+def update_artist(artist_id):
+    json_object = request.json 
+    artist = Artist.query.get_or_404(artist_id)
+    artist.name = json_object['name']
+    artist.city = json_object['city']
+    artist.phone = json_object['phone']
+    artist.fb_link = json_object['fb_link']
+    genre = Genre.query.filter_by(name=json_object['genres']).first()
+    artist.genres = genre
+    db.session.commit()
+    return jsonify({"response":"Artist has been updated!"})
+
+
+@app.route('/show/<int:show_id>/update',methods=['GET', 'POST'])
+def update_show(show_id):
+    json_object = request.json
+    show = Show.query.get_or_404(show_id)
+    show.id_artist = json_object['id_artist']
+    show.id_venue = json_object['id_venue']
+    show.start_time = json_object['start_time']
+
+    db.session.add(show)
+    db.session.commit()
+    return jsonify({"response":"Show has been updated!"})
+
+
 
 
 
