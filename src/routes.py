@@ -214,7 +214,7 @@ def update_venue(venue_id):
     venue.phone = json_object['phone']
     venue.fb_link = json_object['fb_link']
     genre = Genre.query.filter_by(name=json_object['genres']).first()
-    venue.genres = genre
+    venue.genres = [genre]
     db.session.commit()
     return jsonify({"response":"Venue has been updated!"})
 
@@ -227,7 +227,7 @@ def update_artist(artist_id):
     artist.phone = json_object['phone']
     artist.fb_link = json_object['fb_link']
     genre = Genre.query.filter_by(name=json_object['genres']).first()
-    artist.genres = genre
+    artist.genres = [genre]
     db.session.commit()
     return jsonify({"response":"Artist has been updated!"})
 
