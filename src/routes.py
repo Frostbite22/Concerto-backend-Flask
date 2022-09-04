@@ -166,4 +166,14 @@ def delete_genre(genre_id):
         pass
     return jsonify({"genre":f"genre with id {genre_id} deleted"})
 
+@app.route("/venue/<int:venue_id>/delete",methods=['POST','GET'])
+def delete_venue(genre_id):
+    venue = Venue.query.get_or_404(venue_id)
+    try :
+        db.session.delete(venue)
+        db.session.commit()
+    except:
+        pass
+    return jsonify({"venue":f"venue with id {venue_id} deleted"})
+
 
