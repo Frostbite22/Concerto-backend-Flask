@@ -178,7 +178,7 @@ def delete_venue(genre_id):
 
 @app.route("/artist/<int:artist_id>/delete",methods=['POST','GET'])
 def delete_artist(artist_id):
-    artist = Artist.query.get_or_404(venue_id)
+    artist = Artist.query.get_or_404(artist_id)
     try :
         db.session.delete(artist)
         db.session.commit()
