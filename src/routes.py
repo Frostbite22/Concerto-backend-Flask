@@ -155,3 +155,15 @@ def get_artist(artist_id):
     artist = Artist.query.get_or_404(artist_id)
     artist_json = to_dict_single(Artist,artist,Genre)  
     return jsonify({"artist":artist_json})
+
+@app.route("/genre/<int:genre_id>/delete",methods=['POST','GET'])
+def delete_genre(genre_id):
+    genre = Genre.query.get_or_404(genre_id)
+    try :
+        db.session.delete(genre)
+        db.session.commit()
+    except:
+        pass
+    return jsonify({"genre":f"genre with id {genre_id} deleted"})
+
+
